@@ -34,10 +34,14 @@ export default function PortfolioPage() {
 
   // Fetch user's investments when component mounts
   useEffect(() => {
-    // TODO: Replace with actual API call to fetch user's investments
     const fetchInvestments = async () => {
       try {
-        const response = await fetch('/api/investments');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user.id) {
+          console.error('No user found in localStorage');
+          return;
+        }
+        const response = await fetch(`/api/investments?userId=${user.id}`);
         const data = await response.json();
         console.log("Investments from api response:", data);
         setInvestments(data);
@@ -52,7 +56,12 @@ export default function PortfolioPage() {
   const handleAddInvestment = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/investments', {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) {
+        console.error('No user found in localStorage');
+        return;
+      }
+      const response = await fetch(`/api/investments?userId=${user.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

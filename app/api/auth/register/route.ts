@@ -4,10 +4,10 @@ import pool from '@/lib/db';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json();
+    const { firstName, email, password } = await request.json();
 
     // Validate input
-    if (!name || !email || !password) {
+    if (!firstName || !email || !password) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -15,32 +15,34 @@ export async function POST(request: Request) {
     }
 
     // Check if user already exists
-    const userExists = await pool.query(
+    const existingUser = await pool.query(
       'SELECT id FROM users WHERE email = $1',
       [email]
     );
 
-    if (userExists.rows.length > 0) {
+    if (existingUser.rows.length > 0) {
       return NextResponse.json(
-        { error: 'User already exists' },
-        { status: 409 }
+        { error: 'Email already registered' },
+        { status: 400 }
       );
     }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(password, salt);
 
-    // Insert new user
+    // Create user
     const result = await pool.query(
       'INSERT INTO users (first_name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, first_name, email',
-      [name, email, hashedPassword]
+      [firstName, email, passwordHash]
     );
+
+    const user = result.rows[0];
 
     return NextResponse.json(
       { 
-        message: 'User registered successfully',
-        user: result.rows[0]
+        message: 'Registration successful',
+        user
       },
       { status: 201 }
     );

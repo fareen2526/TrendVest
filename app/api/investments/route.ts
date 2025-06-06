@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // TODO: Get user ID from session
-    const userId = 1; // Temporary hardcoded user ID
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
 
     const result = await pool.query(
       'SELECT * FROM investments WHERE user_id = $1 ORDER BY created_at DESC',
@@ -23,10 +30,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
     const { name, shares, purchasePrice } = await request.json();
-    
-    // TODO: Get user ID from session
-    const userId = 1; // Temporary hardcoded user ID
 
     const result = await pool.query(
       `INSERT INTO investments 

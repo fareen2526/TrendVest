@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import pool from '@/lib/db';
+import { cookies } from 'next/headers';
 
 export async function POST(request: Request) {
   try {
@@ -41,13 +42,24 @@ export async function POST(request: Request) {
     // Remove password hash from response
     const { password_hash, ...userWithoutPassword } = user;
 
-    return NextResponse.json(
+    // Create response
+    const response = NextResponse.json(
       { 
         message: 'Login successful',
         user: userWithoutPassword
       },
       { status: 200 }
     );
+
+    // Set session token cookie
+    response.cookies.set('session_token', user.id.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    });
+
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
