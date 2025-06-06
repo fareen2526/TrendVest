@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: 'Track and manage your investments',
 };
 
+// Root layout component that wraps all pages in the application.
 export default function RootLayout({
   children,
 }: {

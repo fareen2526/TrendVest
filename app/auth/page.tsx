@@ -1,5 +1,6 @@
 'use client';
 
+// Authentication page for user login and registration.
 // auth page
 // login and register
 

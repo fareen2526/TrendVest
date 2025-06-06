@@ -1,3 +1,4 @@
+// User registration page with form validation and account creation.
 'use client';
 
 import { useState } from 'react';

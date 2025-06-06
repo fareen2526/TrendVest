@@ -1,3 +1,4 @@
+// Main landing page component for the finance tracking application.
 'use client';
 
 import { useState, useEffect } from 'react';

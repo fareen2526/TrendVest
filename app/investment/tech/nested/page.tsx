@@ -1,3 +1,4 @@
+// Nested tech investment overview page.
 import Link from 'next/link';
 
 export default function NestedPage() {

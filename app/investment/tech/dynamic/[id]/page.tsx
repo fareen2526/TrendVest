@@ -1,3 +1,4 @@
+// Dynamic tech investment detail page with ID-based routing.
 import Link from 'next/link';
 
 interface PageProps {

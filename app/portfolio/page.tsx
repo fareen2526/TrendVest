@@ -1,9 +1,10 @@
+// Portfolio management page for tracking and managing investment entries.
 // greeting page
 // new entries where users can add new investments
 // graphs - total value based off all investments
 
 // when running the app in development mode: npm run dev
-// when running the app to present: npm run start
+// when running the app to present: npm run build && npm run start
 
 'use client';
 

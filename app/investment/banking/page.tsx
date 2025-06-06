@@ -1,3 +1,4 @@
+// Banking investment tracking and management page.
 import Link from 'next/link';
 
 // Sample banking stocks data

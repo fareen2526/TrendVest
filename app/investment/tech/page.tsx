@@ -1,3 +1,4 @@
+// Technology investment tracking and management page.
 import Link from 'next/link';
 
 // Sample tech stocks data
